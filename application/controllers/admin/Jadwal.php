@@ -273,17 +273,19 @@ class Jadwal extends CI_Controller
 		$sheet->setCellValue('P1', "JNS ANESTESI");
 		$sheet->setCellValue('Q1', "DPJP ANESTESI");
 		$sheet->setCellValue('R1', "JAM SERAH TERIMA");
-		$sheet->setCellValue('S1', "JAM OPERASI");
-		$sheet->setCellValue('T1', "JAM OPERASI SELESAI");
+		$sheet->setCellValue('S1', "JAM MULAI");
+		$sheet->setCellValue('T1', "JAM SELESAI");
 
 		$tgl_operasi = $this->input->post('tgl_operasi');
+		$tgl_operasi_baru = date('Y-m-d', strtotime($tgl_operasi));
 		$this->db->select('jadwal_opr.*, mst_tindakan_opr.tindakan as nama_tindakan_operasi');
 		$this->db->from('jadwal_opr');
 		$this->db->join('mst_tindakan_opr', 'jadwal_opr.tindakan_operasi = mst_tindakan_opr.id_tindakan');
-		$this->db->where('jadwal_opr.tgl_operasi', $tgl_operasi);
+		$this->db->where('jadwal_opr.tgl_operasi', $tgl_operasi_baru);
 		$data = $this->db->get()->result_array();
-		$x = 2;
+		$x = 1;
 		foreach ($data as $row) {
+			$x++;
 			$sheet->setCellValue('A' . $x, $x - 1);
 			$sheet->setCellValue('B' . $x, $row['nama_pasien']);
 			$sheet->setCellValue('C' . $x, $row['kelas_pasien']);
